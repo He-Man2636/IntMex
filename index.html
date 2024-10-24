@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descargar Archivos y Resumen</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilo para los menús emergentes */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            min-width: 160px;
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo-text">
+                <img src="logo.png" alt="Logo IntMex" class="logo">
+                <h1 class="title">Análisis y Reportes</h1>
+            </div>
+        </header>
+        <div class="content">
+            <!-- Botón Descargar Archivos con menú emergente -->
+            <div class="dropdown">
+                <button class="btn" id="dropdownBtn1">Descargar Archivos</button>
+                <div class="dropdown-content" id="dropdownMenu1">
+                    <a href="#" onclick="openPDF('tijuana', 'dropdownMenu1')">Tijuana</a>
+                    <a href="#" onclick="openPDF('culiacan', 'dropdownMenu1')">Culiacán</a>
+                    <a href="#" onclick="openPDF('mochis', 'dropdownMenu1')">Los Mochis</a>
+                    <a href="#" onclick="downloadFile()">General IntMex</a>
+                </div>
+            </div>
+            
+            <!-- Botón Visualizar Resumen con menú emergente -->
+            <div class="dropdown">
+                <button class="btn" id="dropdownBtn2">Visualizar Resumen en Línea</button>
+                <div class="dropdown-content" id="dropdownMenu2">
+                    <a href="#" onclick="openPDF('tijuana', 'dropdownMenu2')">Resumen Tijuana</a>
+                    <a href="#" onclick="openPDF('culiacan', 'dropdownMenu2')">Resumen Culiacán</a>
+                    <a href="#" onclick="openPDF('mochis', 'dropdownMenu2')">Resumen Los Mochis</a>
+                    <a href="#" onclick="openPDF('intmex', 'dropdownMenu2')">Resumen General IntMex</a>					
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para abrir el PDF en una nueva pestaña y ocultar el menú
+        function openPDF(resumen, menuId) {
+            let pdfUrl = '';
+
+            // Verificar cuál resumen se seleccionó y asignar el archivo correspondiente
+            if (resumen === 'tijuana') {
+                pdfUrl = "/IntMex/wordpress/Reportes/Rep_01_Tijuana.pdf";
+            } else if (resumen === 'culiacan') {
+                pdfUrl = "/IntMex/wordpress/Reportes/Rep_01_Culiacan.pdf";
+            } else if (resumen === 'mochis') {
+                pdfUrl = "/IntMex/wordpress/Reportes/Rep_01_Mochis.pdf";
+            } else if (resumen === 'intmex') {
+                pdfUrl = "/IntMex/wordpress/Reportes/Rep_01_General.pdf";
+            }
+
+            // Abrir el PDF en una nueva pestaña
+            if (pdfUrl !== '') {
+                window.open(pdfUrl, '_blank');
+            } else {
+                alert("Resumen para " + resumen + " aún no disponible.");
+            }
+
+            // Ocultar el menú
+            hideMenu(menuId);
+        }
+
+        // Función para descargar el archivo directamente desde SharePoint
+        function downloadFile() {
+            const link = document.createElement('a');
+            link.href = "https://intmex-my.sharepoint.com/personal/jgomez_distribuidoragv_com/_layouts/15/download.aspx?UniqueId=7de8d519%2D6335%2D45ac%2D857e%2D30319de6efb5";
+            link.target = "_blank"; // Abre en una nueva pestaña
+            link.rel = "noopener noreferrer"; // Seguridad al abrir una nueva pestaña
+            link.click(); // Simular el clic para iniciar la descarga
+
+            hideMenu('dropdownMenu1'); // Ocultar el menú después de la selección
+        }
+
+        // Ocultar el menú cuando se seleccione una opción
+        function hideMenu(menuId) {
+            document.getElementById(menuId).style.display = 'none';
+        }
+
+        // Mostrar/ocultar menú del botón "Descargar Archivos"
+        document.getElementById('dropdownBtn1').addEventListener('click', function(event) {
+            event.stopPropagation();
+            toggleMenu('dropdownMenu1');
+        });
+
+        // Mostrar/ocultar menú del botón "Visualizar Resumen en Línea"
+        document.getElementById('dropdownBtn2').addEventListener('click', function(event) {
+            event.stopPropagation();
+            toggleMenu('dropdownMenu2');
+        });
+
+        // Función para mostrar y ocultar menú desplegable
+        function toggleMenu(menuId) {
+            var menu = document.getElementById(menuId);
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // Cerrar los menús si se hace clic fuera de ellos
+        window.onclick = function() {
+            hideMenu('dropdownMenu1');
+            hideMenu('dropdownMenu2');
+        };
+    </script>
+</body>
+</html>
